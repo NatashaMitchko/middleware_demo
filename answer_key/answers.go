@@ -10,6 +10,7 @@ func BadSecurity(password string) func(handler http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 			if req.Header.Get("Password") != password {
 				w.WriteHeader(http.StatusUnauthorized)
+				w.Write([]byte("Wrong Passcode\n"))
 				return
 			}
 			handler.ServeHTTP(w, req)
