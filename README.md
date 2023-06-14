@@ -22,7 +22,8 @@ $ curl -H "Password: 007" localhost:8080/rendezvous
 ### with middleware:
 ```console
 $ go run middleware.go &
-$ curl localhost:8080/rendezvous
-$ curl localhost:8080/enemy-spies
-$ curl localhost:8080/secure-line
+$ curl -v localhost:8080/rendezvous
+$ curl -H "Password: 007" localhost:8080/rendezvous
+$ curl -H "Password: 007" localhost:8080/enemy-spies
+$ curl  -H "Password: 007" localhost:8080/secure-line
 ```
