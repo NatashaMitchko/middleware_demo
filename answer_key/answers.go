@@ -5,17 +5,15 @@ import (
 	"net/http"
 )
 
-func BadSecurity(password string) func(handler http.Handler) http.Handler {
-	return func(handler http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-			if req.Header.Get("Password") != password {
-				w.WriteHeader(http.StatusUnauthorized)
-				w.Write([]byte("Wrong Passcode\n"))
-				return
-			}
-			handler.ServeHTTP(w, req)
-		})
-	}
+func BadSecurity(handler http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		if req.Header.Get("Password") != "007" {
+			w.WriteHeader(http.StatusUnauthorized)
+			w.Write([]byte("Wrong Passcode\n"))
+			return
+		}
+		handler.ServeHTTP(w, req)
+	})
 }
 
 func RendevouzMW(w http.ResponseWriter, req *http.Request) {
@@ -32,9 +30,7 @@ func SecureLine(w http.ResponseWriter, req *http.Request) {
 func main() {
 
 	mux := http.NewServeMux()
-
-	badSecurity := BadSecurity("007")
-	wrappedmux := badSecurity(mux)
+	wrappedmux := BadSecurity(mux)
 
 	mux.HandleFunc("/rendezvous", RendevouzMW)
 	mux.HandleFunc("/enemy-spies", Enemies)

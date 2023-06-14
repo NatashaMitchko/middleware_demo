@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-//func BadSecurity(password string) TODO: complete the middleware function
+//func BadSecurity TODO: complete the middleware function
 
 func RendevouzMW(w http.ResponseWriter, req *http.Request) {
 	fmt.Fprintf(w, "The dropoff point is: 42 Wallaby Way, Sydney\n")
