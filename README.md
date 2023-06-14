@@ -9,7 +9,7 @@ The only way they can see it is if they know the super secret passcode.
 
 To do this we will use http middleware!
 
-## For Demo:g
+## For Demo
 
 ### no middleware:
 ```console
