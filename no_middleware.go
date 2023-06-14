@@ -14,9 +14,12 @@ func BadSecurity(password string) error {
 }
 
 func Rendevouz(w http.ResponseWriter, req *http.Request) {
-	// pw := req.Header.Get("Password")
-	// TODO: Check the password here!
-	// if err != nil write 403 unauthorized, wrong passcode
+	pw := req.Header.Get("Password")
+	if err := BadSecurity(pw); err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte("WRONG PASSCODE\n"))
+		return
+	}
 
 	fmt.Fprintf(w, "The dropoff point is: 42 Wallaby Way, Sydney\n")
 }

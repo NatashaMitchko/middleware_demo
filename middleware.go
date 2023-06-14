@@ -5,7 +5,16 @@ import (
 	"net/http"
 )
 
-//func BadSecurity TODO: complete the middleware function
+func BadSecurity(handler http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		if req.Header.Get("Password") != "007" {
+			w.WriteHeader(http.StatusUnauthorized)
+			w.Write([]byte("Wrong Passcode\n"))
+			return
+		}
+		handler.ServeHTTP(w, req)
+	})
+}
 
 func RendevouzMW(w http.ResponseWriter, req *http.Request) {
 	fmt.Fprintf(w, "The dropoff point is: 42 Wallaby Way, Sydney\n")
@@ -21,8 +30,7 @@ func SecureLine(w http.ResponseWriter, req *http.Request) {
 func main() {
 
 	mux := http.NewServeMux()
-
-	// TODO: add middleware
+	wrappedmux := BadSecurity(mux)
 
 	mux.HandleFunc("/rendezvous", RendevouzMW)
 	mux.HandleFunc("/enemy-spies", Enemies)
@@ -30,7 +38,7 @@ func main() {
 
 	s := http.Server{
 		Addr:    ":8080",
-		Handler: mux,
+		Handler: wrappedmux,
 	}
 
 	err := s.ListenAndServe()
